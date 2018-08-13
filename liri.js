@@ -18,116 +18,124 @@ var arguments1 = process.argv;
 var arguments2 = process.argv[2];
 
 // A variable to hold our data
-var data ="";
+var data = "";
 
 // capture all data 
-for ( var i =3; i < arguments1.length; i++ ){
-    data = data + "" + arguments1[i];
+for (var i = 3; i < arguments1.length; i++) {
+  data = data + "" + arguments1[i];
 
 }
 
 
-// twitter
- var displayTweets = function(){
- 
-var params = {screen_name: 'nodejs'};
-client.get('statuses/user_timeline', params, function(error, tweets, response) {
-  if (!error) {
-    for (var i = 0; i <tweets.length; i++){
-      var date = tweets[i].created_at;
-      console.log(tweets[i].text + "Created At:"+ date.substring(0, 19) );
-      console.log("-------------");
+// function to display last 20 tweets
+var displayTweets = function () {
 
-      //fs.appendFile('log.txt', tweets[i].text);
+  var params = { screen_name: 'nodejs' };
+  client.get('statuses/user_timeline', params, function (error, tweets, response) {
+    if (!error) {
+      for (var i = 0; i < tweets.length; i++) {
+        var date = tweets[i].created_at;
+        console.log(tweets[i].text + "Created At:" + date.substring(0, 19));
+        console.log("-------------");
+
+        //fs.appendFile('log.txt', tweets[i].text);
       }
-   
-  }
-  else {
-    console.log(error);
-  }
-});
+
+    }
+    else {
+      console.log(error);
+    }
+  });
 
 }
 
- var searchSpotifySong = function (song){
-// spotify 
-spotify.search({ type: 'track', query: song }, function(err, data) {
+var searchSpotifySong = function (song) {
+  // spotify 
+  spotify.search({ type: 'track', query: song }, function (err, data) {
     if (!err) {
-      for (var i = 0; i <data.tracks.items.length; i++){
+      for (var i = 0; i < data.tracks.items.length; i++) {
         dataSong = data.tracks.items[i];
 
         console.log("Artist:" + dataSong.artists[0].name);
         console.log("song:" + dataSong.name);
-        console.log("Preview URL :"  + dataSong.preview_url);
+        console.log("Preview URL :" + dataSong.preview_url);
         console.log("--------------------");
 
       }
-  
+
     }
-      else {
-  console.log("Error occured"); 
-      }
+    else {
+      console.log("Error occured");
+    }
   });
 }
 
 
 
 
- var omdbMovie = function (movie){
-  
-   var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&plot =short&tomatoes=true';
-// Then run a request to the OMDB API with the movie specified
- request(omdbURL, function(error, response, body) {
-   
-  // If the request is successful (i.e. if the response status code is 200)
-  if (!error && response.statusCode === 200) {
-    var json = JSON.parse(body);
-    console.log("Title of movie: " + json.Title);
-    console.log("The year the movie came out: " + json.Year);
-    console.log("IMDB Rating of the movie:" + json.imdbRating);
-    console.log("Rotten Tomatoes Rating of the movie:" + json.tomatoRating);
-    console.log("Country where the movie was produced:" + json.Country);
-    console.log("Language of the movie:" + json.Language);
-    console.log("Plot of the movie:" + json.Plot);
-    console.log("Actors in the movie" + json.Actors);
+var omdbMovie = function (movie) {
+  var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&tomatoes&apikey=trilogy'
+ // var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&tomatoes=trilogy';
+  // Then run a request to the OMDB API with the movie specified
+  request(omdbURL, function (error, response, body) {
 
-    // Parse the body of the site and recover just the imdbRating
-    // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-    //console.log("The movie's rating is: " + JSON.parse(body));
-  } 
-  else {
-    console.log('Erro occured');
-  }
-   if (movie === null){
-      movie = 'Mr. Nobody';
+    // If the request is successful (i.e. if the response status code is 200)
+    if (!error && response.statusCode === 200) {
+      var jsonn = JSON.parse(body);
+      console.log("Title of movie: " + jsonn.Title);
+      console.log("The year the movie came out: " + jsonn.Year);
+      console.log("IMDB Rating of the movie:" + jsonn.imdbRating);
+      console.log("Rotten Tomatoes Rating of the movie:" + jsonn.tomatoRating);
+      console.log("Country where the movie was produced:" + jsonn.Country);
+      console.log("Language of the movie:" + jsonn.Language);
+      console.log("Plot of the movie:" + jsonn.Plot);
+      console.log("Actors in the movie" + jsonn.Actors);
+
+      // Parse the body of the site and recover just the imdbRating
+      // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
+      //console.log("The movie's rating is: " + JSON.parse(body));
+    }
+      else {
+       console.log('Erro occured');
+     }
+    if (movie === null) {
+        movie = "Mr. Nobody";
       console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
       console.log("It's on Netflix!");
-   }
-});
+    }
+  });
 
 }
 
 
- var doWhatItSays = function(userInput){
-   if (userInput ===""){
+var doWhatItSays = function (userInput) {
+  if (userInput === "") {
 
-   }
+  }
 
- }
+}
 
 
-if (arguments2==='my-tweets'){
+if (arguments2 === 'my-tweets') {
   displayTweets();
 }
-else if(arguments2=='spotify-this-song'){
-  searchSpotifySong();
-}
-else if(arguments2 ==='movie-this'){
-  omdbMovie();
-}
+else if (arguments2 == 'spotify-this-song') {
+  if (data) {
+    searchSpotifySong(data);
 
-else if (arguments2 ==="do-what-it-says"){
-   doWhatItSays();
+  } else {
+    searchSpotifySong("Movado Forever");
+  }
+}
+else if (arguments2 === 'movie-this') {
+  if(data) {
+  omdbMovie(data);
+} else{
+    omdbMovie("Mr. NoBody");
+}
+}
+else if (arguments2 === "do-what-it-says") {
+  doWhatItSays();
 }
 else {
   console.log("{Please enter a command: my-tweets, spotify-this-song, movie-this, do-what-it-says}");
