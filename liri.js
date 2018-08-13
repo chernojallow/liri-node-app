@@ -1,20 +1,18 @@
-// require("dotenv").config();
-
-// var spotify = new Spotify(keys.spotify);
-//var client = new Twitter(keys.twitter);
+require("dotenv").config();
 
 
 
-
+var fs = require('fs');
 var Twitter = require('twitter');
 var spotify = require('node-spotify-api');
 var request = require('request');
-var keys = require("./keys");
+var keys = require("./keys.js");
 var client = new Twitter(keys.twitter);
+//var spotify = new spotify(Keys.spotify);
 
 
-// grap data from keys 
-var keys = require ('./keys.js');
+
+
 // take in command line arguments
 var arguments1 = process.argv;
 var arguments2 = process.argv[2];
@@ -31,7 +29,7 @@ for ( var i =3; i < arguments1.length; i++ ){
 
 // twitter
 displayTweets = function(){
-
+ 
 var params = {screen_name: 'nodejs'};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
@@ -39,6 +37,8 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
       var date = tweets[i].created_at;
       console.log(tweets[i].text);
       console.log("created at" + date);
+
+      fs.appendFile('log.txt', tweets[i].text);
       }
    
   }
@@ -49,14 +49,24 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 
 }
 
-searchSpotifySong = function (){
+searchSpotifySong = function (song){
 // spotify 
-spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
+spotify.search({ type: 'track', query: song }, function(err, data) {
+    if (!err) {
+      for (var i = 0; i <data.tracks.items.length; i++){
+        dataSong = data.tracks.items[i];
+
+        console.log("Artist:" + dataSong.artists[0].name);
+        console.log("song:" + dataSong.name);
+        console.log("Preview URL :"  + dataSong.preview_url);
+        console.log("--------------------");
+
+      }
+  
     }
-   
-  console.log(data); 
+      else {
+  console.log("Error occured"); 
+      }
   });
 }
 
@@ -89,4 +99,11 @@ else if(arguments2=='spotify-this-song'){
 }
 else if(arguments2 ==='movie-this'){
   omdbMovie();
+}
+
+else if (arguments2 ==="do-what-it-says"){
+   doWhatItSays();
+}
+else {
+  console.log("{Please enter a command: my-tweets, spotify-this-song, movie-this, do-what-it-says}");
 }
