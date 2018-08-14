@@ -1,7 +1,5 @@
 require("dotenv").config();
 
-
-
 var fs = require('fs');
 var Twitter = require('twitter');
 var spotify = require('node-spotify-api');
@@ -9,8 +7,6 @@ var request = require('request');
 var keys = require("./keys.js");
 var client = new Twitter(keys.twitter);
 var spotify = new spotify(keys.spotify);
-
-
 
 
 // take in command line arguments
@@ -75,7 +71,7 @@ var searchSpotifySong = function (song) {
 
 var omdbMovie = function (movie) {
   var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&tomatoes&apikey=trilogy'
- // var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&tomatoes=trilogy';
+  // var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&tomatoes=trilogy';
   // Then run a request to the OMDB API with the movie specified
   request(omdbURL, function (error, response, body) {
 
@@ -95,25 +91,38 @@ var omdbMovie = function (movie) {
       // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
       //console.log("The movie's rating is: " + JSON.parse(body));
     }
-      else {
-       console.log('Erro occured');
-     }
+    else {
+      console.log('Erro occured');
+    }
     if (movie === null) {
-        movie = "Mr. Nobody";
+      movie = "Mr. Nobody";
       console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
       console.log("It's on Netflix!");
     }
   });
 
 }
+   var doWhatItSays = function(){
 
+fs.readFile("random.txt", "utf8", function(error, data) {
 
-var doWhatItSays = function (userInput) {
-  if (userInput === "") {
-
+  // If the code experiences any errors it will log the error to the console.
+  if (error) {
+    return console.log(error);
   }
 
-}
+  // We will then print the contents of data
+  //console.log(data);
+
+  // Then split it by commas (to make it more readable)
+    var dataArr = data.split(",");
+      searchSpotifySong(dataArr[1]);
+  // We will then re-display the content as an array for later use.
+      //console.log(dataArr);
+
+  });
+
+   }
 
 
 if (arguments2 === 'my-tweets') {
@@ -128,11 +137,11 @@ else if (arguments2 == 'spotify-this-song') {
   }
 }
 else if (arguments2 === 'movie-this') {
-  if(data) {
-  omdbMovie(data);
-} else{
+  if (data) {
+    omdbMovie(data);
+  } else {
     omdbMovie("Mr. NoBody");
-}
+  }
 }
 else if (arguments2 === "do-what-it-says") {
   doWhatItSays();
