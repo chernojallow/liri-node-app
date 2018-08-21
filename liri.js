@@ -55,6 +55,7 @@ var searchSpotifySong = function (song) {
         console.log("Artist:" + dataSong.artists[0].name);
         console.log("song:" + dataSong.name);
         console.log("Preview URL :" + dataSong.preview_url);
+        console.log("The songs Album:" + dataSong.album.name);
         console.log("--------------------");
 
       }
@@ -111,14 +112,14 @@ fs.readFile("random.txt", "utf8", function(error, data) {
     return console.log(error);
   }
 
-  // We will then print the contents of data
+  //  print the contents of data
   //console.log(data);
 
-  // Then split it by commas (to make it more readable)
+  // split it by commas (to make it more readable)
     var dataArr = data.split(",");
       searchSpotifySong(dataArr[1]);
   // We will then re-display the content as an array for later use.
-      //console.log(dataArr);
+      console.log(dataArr);
 
   });
 
