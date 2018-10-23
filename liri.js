@@ -1,5 +1,6 @@
-require("dotenv").config();
 
+//Dependencies
+require("dotenv").config();
 var fs = require('fs');
 var Twitter = require('twitter');
 var spotify = require('node-spotify-api');
@@ -7,7 +8,6 @@ var request = require('request');
 var keys = require("./keys.js");
 var client = new Twitter(keys.twitter);
 var spotify = new spotify(keys.spotify);
-
 
 // take in command line arguments
 var arguments1 = process.argv;
@@ -19,9 +19,7 @@ var data = "";
 // capture all data 
 for (var i = 3; i < arguments1.length; i++) {
   data = data + "" + arguments1[i];
-
 }
-
 
 // function to display last 20 tweets
 var displayTweets = function () {
@@ -36,13 +34,11 @@ var displayTweets = function () {
 
         //fs.appendFile('log.txt', tweets[i].text);
       }
-
     }
     else {
       console.log(error);
     }
   });
-
 }
 
 var searchSpotifySong = function (song) {
@@ -57,9 +53,7 @@ var searchSpotifySong = function (song) {
         console.log("Preview URL :" + dataSong.preview_url);
         console.log("The songs Album:" + dataSong.album.name);
         console.log("--------------------");
-
       }
-
     }
     else {
       console.log("Error occured");
@@ -67,12 +61,8 @@ var searchSpotifySong = function (song) {
   });
 }
 
-
-
-
 var omdbMovie = function (movie) {
   var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&tomatoes&apikey=trilogy'
-  // var omdbURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&tomatoes=trilogy';
   // Then run a request to the OMDB API with the movie specified
   request(omdbURL, function (error, response, body) {
 
@@ -101,30 +91,26 @@ var omdbMovie = function (movie) {
       console.log("It's on Netflix!");
     }
   });
-
 }
-   var doWhatItSays = function(){
+var doWhatItSays = function () {
 
-fs.readFile("random.txt", "utf8", function(error, data) {
+  fs.readFile("random.txt", "utf8", function (error, data) {
 
-  // If the code experiences any errors it will log the error to the console.
-  if (error) {
-    return console.log(error);
-  }
+    // If the code experiences any errors it will log the error to the console.
+    if (error) {
+      return console.log(error);
+    }
 
-  //  print the contents of data
-  //console.log(data);
-
-  // split it by commas (to make it more readable)
+    //  print the contents of data
+    //console.log(data);
+    // split it by commas (to make it more readable)
     var dataArr = data.split(",");
-      searchSpotifySong(dataArr[1]);
-  // We will then re-display the content as an array for later use.
-      console.log(dataArr);
+    searchSpotifySong(dataArr[1]);
+    // We will then re-display the content as an array for later use.
+    console.log(dataArr);
 
   });
-
-   }
-
+}
 
 if (arguments2 === 'my-tweets') {
   displayTweets();
@@ -132,7 +118,6 @@ if (arguments2 === 'my-tweets') {
 else if (arguments2 == 'spotify-this-song') {
   if (data) {
     searchSpotifySong(data);
-
   } else {
     searchSpotifySong("Movado Forever");
   }
